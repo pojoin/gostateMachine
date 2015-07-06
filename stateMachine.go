@@ -12,7 +12,7 @@ type StateMachine struct {
 }
 
 func NewStateMachine(name string) StateMachine {
-	return StateMachine{Name: name}
+	return StateMachine{Name: name, transitionMap: make(map[string]*Transition)}
 }
 
 func (m *StateMachine) AddTransition(tName string, startState, nextState State) {
