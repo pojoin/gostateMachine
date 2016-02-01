@@ -9,18 +9,28 @@ import (
 type StateMachine struct {
 	Name          string
 	transitionMap map[string]*Transition
+	callBacks     map[string]CallBack
 }
 
 func NewStateMachine(name string) StateMachine {
-	return StateMachine{Name: name, transitionMap: make(map[string]*Transition)}
+	return StateMachine{
+		Name:          name,
+		transitionMap: make(map[string]*Transition),
+		callBacks:     make(map[string]CallBack),
+	}
+}
+
+func (m *StateMachine) PutCallBacks(name string, cb CallBack) {
+	m.callBacks[name] = cb
 }
 
 func (m *StateMachine) AddTransition(tName string, startState, nextState State) {
 	tName = strings.ToUpper(tName)
 	t := &Transition{
-		startState: startState,
-		nextState:  nextState,
-		Name:       tName,
+		startState:   startState,
+		nextState:    nextState,
+		Name:         tName,
+		stateMachine: m,
 	}
 	m.transitionMap[tName] = t
 }

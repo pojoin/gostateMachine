@@ -20,7 +20,8 @@ type Transition struct {
 	nextState    State
 	runableState State
 	Name         string
-	callBack     CallBack
+	callBack     string
+	stateMachine *StateMachine
 }
 
 func NewTransition(transitionName string, startState, nextState State) Transition {
@@ -31,19 +32,18 @@ func NewTransition(transitionName string, startState, nextState State) Transitio
 	}
 }
 
-func (t *Transition) SetCallBack(c CallBack) {
-	t.callBack = c
-}
-
 func (t *Transition) execute(data map[string]interface{}) State {
-	if t.callBack == nil {
-		t.callBack = &callBackBlank{}
+	var callBack CallBack
+	if c, ok := t.stateMachine.callBacks[t.callBack]; ok {
+		callBack = c
+	} else {
+		callBack = &callBackBlank{}
 	}
-	t.callBack.BeforeRunCallBack(t.runableState, data)
-	if !t.callBack.RunEffectCallBack(t.runableState, data) {
+	callBack.BeforeRunCallBack(t.runableState, data)
+	if !callBack.RunEffectCallBack(t.runableState, data) {
 		return t.runableState
 	}
 	t.runableState = t.nextState
-	t.callBack.AffterRunCallBack(t.runableState, data)
+	callBack.AffterRunCallBack(t.runableState, data)
 	return t.runableState
 }
