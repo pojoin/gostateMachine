@@ -49,7 +49,7 @@ func (m *StateMachine) GetTransitionByName(tName string) (*Transition, error) {
 func (m *StateMachine) GetTransitionByState(state State) []*Transition {
 	ts := make([]*Transition, 0)
 	for _, v := range m.transitionMap {
-		if v.startState.IsEquels(state) {
+		if v.startState.Equels(state) {
 			ts = append(ts, v)
 		}
 	}
