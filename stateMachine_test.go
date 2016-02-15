@@ -6,7 +6,7 @@ import (
 
 //未提交->未审核->审核通过
 //			|->审核未通过
-func createQjStateMachine() StateMachine {
+func createQjStateMachine() *StateMachine {
 	qj := NewStateMachine("qj", "1")
 	wtj := NewState("未提交")
 	wsh := NewState("未审核")
