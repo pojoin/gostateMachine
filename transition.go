@@ -25,14 +25,14 @@ type Transition struct {
 	inputs       []interface{}
 }
 
-func NewTransition(transitionName string, startState, nextState State) Transition {
-	t := Transition{
-		Name:       transitionName,
-		startState: startState,
-		nextState:  nextState,
+func NewTransition(transitionName string, startState, nextState State, sm *StateMachine) *Transition {
+	return &Transition{
+		Name:         transitionName,
+		startState:   startState,
+		nextState:    nextState,
+		stateMachine: sm,
+		inputs:       make([]interface{}, 0),
 	}
-	t.inputs = make([]interface{}, 0)
-	return t
 }
 
 func (t *Transition) AppendInput(input interface{}) {
