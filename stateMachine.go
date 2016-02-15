@@ -8,6 +8,7 @@ import (
 //状态机定义
 type StateMachine struct {
 	Name          string
+	Version       string
 	transitionMap map[string]*Transition
 	callBacks     map[string]CallBack
 }
