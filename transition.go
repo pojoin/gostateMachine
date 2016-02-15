@@ -22,14 +22,21 @@ type Transition struct {
 	Name         string
 	callBack     string
 	stateMachine *StateMachine
+	inputs       []interface{}
 }
 
 func NewTransition(transitionName string, startState, nextState State) Transition {
-	return Transition{
+	t := Transition{
 		Name:       transitionName,
 		startState: startState,
 		nextState:  nextState,
 	}
+	t.inputs = make([]interface{}, 0)
+	return t
+}
+
+func (t *Transition) AppendInput(input interface{}) {
+	t.inputs = append(t.inputs, input)
 }
 
 func (t *Transition) execute(data map[string]interface{}) State {
