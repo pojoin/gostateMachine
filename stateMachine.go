@@ -14,9 +14,10 @@ type StateMachine struct {
 	alias         map[string]string
 }
 
-func NewStateMachine(name string) StateMachine {
+func NewStateMachine(name, version string) StateMachine {
 	return StateMachine{
 		Name:          name,
+		Version:       version,
 		transitionMap: make(map[string]*Transition),
 		callBacks:     make(map[string]CallBack),
 		alias:         make(map[string]string),
