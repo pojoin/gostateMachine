@@ -24,6 +24,10 @@ func NewStateMachine(name, version string) StateMachine {
 	}
 }
 
+func (m *StateMachine) PutAlias(key, value string) {
+	m.alias[key] = value
+}
+
 func (m *StateMachine) PutCallBacks(name string, cb CallBack) {
 	m.callBacks[name] = cb
 }
