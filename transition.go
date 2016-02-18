@@ -50,7 +50,7 @@ func (t *Transition) GetInputs() []interface{} {
 	return t.inputs
 }
 
-func (t *Transition) execute(data interface{}) State {
+func (t *Transition) Execute(data interface{}) State {
 	var callBack CallBack
 	if c, ok := t.stateMachine.callBacks[t.callBack]; ok {
 		callBack = c
