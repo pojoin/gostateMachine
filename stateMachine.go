@@ -7,8 +7,8 @@ import (
 
 //状态机定义
 type StateMachine struct {
-	Name          string
-	Version       string
+	name          string
+	version       string
 	transitionMap map[string]*Transition
 	callBacks     map[string]CallBack
 	alias         map[string]string
@@ -16,12 +16,19 @@ type StateMachine struct {
 
 func NewStateMachine(name, version string) *StateMachine {
 	return &StateMachine{
-		Name:          name,
-		Version:       version,
+		name:          name,
+		version:       version,
 		transitionMap: make(map[string]*Transition),
 		callBacks:     make(map[string]CallBack),
 		alias:         make(map[string]string),
 	}
+}
+
+func (m *StateMachine) Name() string {
+	return m.name
+}
+func (m *StateMachine) Version() string {
+	return m.version
 }
 
 func (m *StateMachine) PutAlias(key, value string) {
@@ -43,7 +50,7 @@ func (m *StateMachine) PutTransition(t *Transition) *StateMachine {
 	if t.stateMachine != m {
 		t.stateMachine = m
 	}
-	m.transitionMap[t.Name] = t
+	m.transitionMap[t.Name()] = t
 	return m
 }
 

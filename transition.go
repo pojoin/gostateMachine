@@ -19,7 +19,7 @@ type Transition struct {
 	startState   State
 	nextState    State
 	runableState State
-	Name         string
+	name         string
 	callBack     string
 	stateMachine *StateMachine
 	inputs       []interface{}
@@ -27,12 +27,16 @@ type Transition struct {
 
 func NewTransition(transitionName string, startState, nextState State, sm *StateMachine) *Transition {
 	return &Transition{
-		Name:         transitionName,
+		name:         transitionName,
 		startState:   startState,
 		nextState:    nextState,
 		stateMachine: sm,
 		inputs:       make([]interface{}, 0),
 	}
+}
+
+func (t *Transition) Name() string {
+	return t.name
 }
 
 func (t *Transition) AppendInput(input interface{}) {
