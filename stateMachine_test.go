@@ -25,7 +25,7 @@ func TestStateMachine(t *testing.T) {
 	if err != nil {
 		t.Error(err.Error())
 	}
-	result := tjsh.execute(make(map[string]interface{}))
+	result := tjsh.execute(nil)
 
 	if result.GetStateValue() != "未审核" {
 		t.Fatal("result", result.GetStateValue())

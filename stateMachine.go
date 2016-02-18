@@ -56,6 +56,7 @@ func (m *StateMachine) PutTransition(t *Transition) *StateMachine {
 
 //获取transition
 func (m *StateMachine) GetTransitionByName(tName string) (*Transition, error) {
+	tName = strings.ToUpper(tName)
 	if t, ok := m.transitionMap[tName]; ok {
 		return t, nil
 	} else {
