@@ -43,6 +43,10 @@ func (t *Transition) AppendInput(input interface{}) {
 	t.inputs = append(t.inputs, input)
 }
 
+func (t *Transition) GetInputs() []interface{} {
+	return t.inputs
+}
+
 func (t *Transition) execute(data map[string]interface{}) State {
 	var callBack CallBack
 	if c, ok := t.stateMachine.callBacks[t.callBack]; ok {
