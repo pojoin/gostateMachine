@@ -25,6 +25,7 @@ type Transition struct {
 	callBack     string
 	stateMachine *StateMachine
 	inputs       []interface{}
+	metaData     map[string]interface{}
 }
 
 func NewTransition(transitionName string, startState, nextState State, sm *StateMachine) *Transition {
@@ -35,6 +36,7 @@ func NewTransition(transitionName string, startState, nextState State, sm *State
 		nextState:    nextState,
 		stateMachine: sm,
 		inputs:       make([]interface{}, 0),
+		metaData:     make(map[string]interface{}),
 	}
 }
 
@@ -48,6 +50,15 @@ func (t *Transition) AppendInput(input interface{}) {
 
 func (t *Transition) GetInputs() []interface{} {
 	return t.inputs
+}
+
+func (t *Transition) PutMetaData(key string, data interface{}) {
+	t.metaData[key] = data
+}
+
+func (t *Transition) GetMetaDataByKey(key string) (interface{}, bool) {
+	data, ok := t.metaData[key]
+	return data, ok
 }
 
 func (t *Transition) Execute(data interface{}) State {
