@@ -32,6 +32,7 @@ func (m *StateMachine) Version() string {
 }
 
 func (m *StateMachine) PutAlias(key, value string) {
+	key = strings.ToUpper(key)
 	m.alias[key] = value
 }
 
