@@ -36,6 +36,12 @@ func (m *StateMachine) PutAlias(key, value string) {
 	m.alias[key] = value
 }
 
+func (m *StateMachine) GetAlias(key string) (value string, ok bool) {
+	key = strings.ToUpper(key)
+	value, ok = m.alias[key]
+	return
+}
+
 func (m *StateMachine) PutCallBacks(name string, cb CallBack) {
 	m.callBacks[name] = cb
 }
@@ -74,9 +80,4 @@ func (m *StateMachine) GetTransitionByState(state State) []*Transition {
 		}
 	}
 	return ts
-}
-
-func (m *StateMachine) GetAlias(key string) (value string, ok bool) {
-	value, ok = m.alias[key]
-	return
 }
