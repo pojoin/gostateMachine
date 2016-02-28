@@ -1,20 +1,23 @@
 package gostateMachine
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type CallBack interface {
-	BeforeRunCallBack(runableState State, data interface{})
-	RunEffectCallBack(runableState State, data interface{}) bool
-	AffterRunCallBack(runableState State, data interface{})
+	BeforeRunCallBack(runableState State, data interface{}, metaData map[string]interface{})
+	RunEffectCallBack(runableState State, data interface{}, metaData map[string]interface{}) error
+	AffterRunCallBack(runableState State, data interface{}, metaData map[string]interface{})
 }
 
 type callBackBlank struct{}
 
-func (*callBackBlank) BeforeRunCallBack(s State, data interface{}) {}
-func (*callBackBlank) RunEffectCallBack(s State, data interface{}) bool {
-	return true
+func (*callBackBlank) BeforeRunCallBack(s State, data interface{}, metaData map[string]interface{}) {}
+func (*callBackBlank) RunEffectCallBack(s State, data interface{}, metaData map[string]interface{}) error {
+	return errors.New("callBackBlank is default,plase reset it")
 }
-func (*callBackBlank) AffterRunCallBack(s State, data interface{}) {}
+func (*callBackBlank) AffterRunCallBack(s State, data interface{}, metaData map[string]interface{}) {}
 
 //定义过渡器
 type Transition struct {
@@ -61,18 +64,18 @@ func (t *Transition) GetMetaDataByKey(key string) (interface{}, bool) {
 	return data, ok
 }
 
-func (t *Transition) Execute(data interface{}) State {
+func (t *Transition) Execute(data interface{}) (State, error) {
 	var callBack CallBack
 	if c, ok := t.stateMachine.callBacks[t.callBack]; ok {
 		callBack = c
 	} else {
 		callBack = &callBackBlank{}
 	}
-	callBack.BeforeRunCallBack(t.runableState, data)
-	if !callBack.RunEffectCallBack(t.runableState, data) {
-		return t.runableState
+	callBack.BeforeRunCallBack(t.runableState, data, t.metaData)
+	if err := callBack.RunEffectCallBack(t.runableState, data, t.metaData); err != nil {
+		return t.runableState, err
 	}
 	t.runableState = t.nextState
-	callBack.AffterRunCallBack(t.runableState, data)
-	return t.runableState
+	callBack.AffterRunCallBack(t.runableState, data, t.metaData)
+	return t.runableState, nil
 }
