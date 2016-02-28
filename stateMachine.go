@@ -48,6 +48,9 @@ func (m *StateMachine) PutCallBacks(name string, cb CallBack) {
 
 func (m *StateMachine) AddTransition(tName string, startState, nextState State) *StateMachine {
 	tName = strings.ToUpper(tName)
+	smm := m.name + ":" + m.version
+	startState.stateMchineName = smm
+	nextState.stateMchineName = smm
 	t := NewTransition(tName, startState, nextState, m)
 	m.transitionMap[tName] = t
 	return m
@@ -57,6 +60,9 @@ func (m *StateMachine) PutTransition(t *Transition) *StateMachine {
 	if t.stateMachine != m {
 		t.stateMachine = m
 	}
+	smm := m.name + ":" + m.version
+	t.startState.stateMchineName = smm
+	t.nextState.stateMchineName = smm
 	m.transitionMap[t.Name()] = t
 	return m
 }

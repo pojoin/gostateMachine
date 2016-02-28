@@ -1,7 +1,8 @@
 package gostateMachine
 
 type State struct {
-	stateValue string
+	stateValue      string
+	stateMchineName string
 }
 
 func NewState(stateValue string) State {
@@ -10,6 +11,10 @@ func NewState(stateValue string) State {
 
 func (s *State) GetStateValue() string {
 	return s.stateValue
+}
+
+func (s *State) GetFullValue() string {
+	return s.stateMchineName + ":" + s.stateValue
 }
 
 func (s *State) SetStateValue(stateValue string) {

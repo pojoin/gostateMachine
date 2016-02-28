@@ -6,18 +6,22 @@ import (
 )
 
 type CallBack interface {
-	BeforeRunCallBack(runableState State, data interface{}, metaData map[string]interface{})
+	BeforeRunCallBack(runableState State, data interface{}, metaData map[string]interface{}) error
 	RunEffectCallBack(runableState State, data interface{}, metaData map[string]interface{}) error
-	AffterRunCallBack(runableState State, data interface{}, metaData map[string]interface{})
+	AffterRunCallBack(runableState State, data interface{}, metaData map[string]interface{}) error
 }
 
 type callBackBlank struct{}
 
-func (*callBackBlank) BeforeRunCallBack(s State, data interface{}, metaData map[string]interface{}) {}
+func (*callBackBlank) BeforeRunCallBack(s State, data interface{}, metaData map[string]interface{}) error {
+	return nil
+}
 func (*callBackBlank) RunEffectCallBack(s State, data interface{}, metaData map[string]interface{}) error {
 	return errors.New("callBackBlank is default,plase reset it")
 }
-func (*callBackBlank) AffterRunCallBack(s State, data interface{}, metaData map[string]interface{}) {}
+func (*callBackBlank) AffterRunCallBack(s State, data interface{}, metaData map[string]interface{}) error {
+	return nil
+}
 
 //定义过渡器
 type Transition struct {
@@ -71,11 +75,15 @@ func (t *Transition) Execute(data interface{}) (State, error) {
 	} else {
 		callBack = &callBackBlank{}
 	}
-	callBack.BeforeRunCallBack(t.runableState, data, t.metaData)
+	if err := callBack.BeforeRunCallBack(t.runableState, data, t.metaData); err != nil {
+		return t.runableState, err
+	}
 	if err := callBack.RunEffectCallBack(t.runableState, data, t.metaData); err != nil {
 		return t.runableState, err
 	}
 	t.runableState = t.nextState
-	callBack.AffterRunCallBack(t.runableState, data, t.metaData)
+	if err := callBack.AffterRunCallBack(t.runableState, data, t.metaData); err != nil {
+		return t.runableState, err
+	}
 	return t.runableState, nil
 }
