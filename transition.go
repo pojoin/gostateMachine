@@ -68,6 +68,10 @@ func (t *Transition) GetMetaDataByKey(key string) (interface{}, bool) {
 	return data, ok
 }
 
+func (t *Transition) SetCallBackName(name string) {
+	t.callBack = name
+}
+
 func (t *Transition) Execute(data interface{}) (State, error) {
 	var callBack CallBack
 	if c, ok := t.stateMachine.callBacks[t.callBack]; ok {
