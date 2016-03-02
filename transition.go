@@ -79,6 +79,7 @@ func (t *Transition) Execute(data interface{}) (State, error) {
 	} else {
 		callBack = &callBackBlank{}
 	}
+	t.runableState = t.startState
 	if err := callBack.BeforeRunCallBack(t.runableState, data, t.metaData); err != nil {
 		return t.runableState, err
 	}
